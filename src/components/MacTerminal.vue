@@ -70,7 +70,22 @@ function scrollToBottom() {
   });
 }
 
+let idleTimer = null;
+
+function resetIdleTimer() {
+  if (idleTimer) clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    if (!terminal.isGaming.value) {
+      terminal.exec("chat hello?"); // Self-trigger a fake chat or just inject a line
+      terminal.injectAdminMessage();
+      scrollToBottom();
+    }
+  }, 30000); // 30 seconds of idle time
+}
+
 function onKeyDown(e) {
+  resetIdleTimer();
+  
   if (terminal.isGaming.value) {
     e.preventDefault();
     terminal.handleGameInput(e.key);
@@ -120,11 +135,13 @@ onMounted(() => {
   inputRef.value?.addEventListener("blur", onBlur);
   // Auto focus
   setTimeout(() => focusInput(), 100);
+  resetIdleTimer();
 });
 
 onUnmounted(() => {
   inputRef.value?.removeEventListener("focus", onFocus);
   inputRef.value?.removeEventListener("blur", onBlur);
+  if (idleTimer) clearTimeout(idleTimer);
 });
 </script>
 
