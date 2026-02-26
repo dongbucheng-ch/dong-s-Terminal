@@ -57,7 +57,17 @@ const FS = {
     ".debug.log":
       "[2026-02-26 14:00:00] 检测到新的受害者\n[2026-02-26 14:00:01] 开始第一轮虚假验证\n[2026-02-26 14:02:30] 受害者仍在点击\n[2026-02-26 14:05:00] 五轮验证全部完成，启动终端\n[2026-02-26 14:05:01] 受害者开始怀疑人生",
   },
-  var: {},
+  var: {
+    root: {
+      ".bash_history": "rm -rf /\nsudo rm -rf /\nls\nwhoami\nhelp\nplay snake",
+      "admin_notes.txt":
+        "这里是 macOS 的真实 root 目录。\n但我怎么可能把真东西放在这里呢？",
+    },
+  },
+  root: {
+    "hello.txt":
+      "你想找 root 目录？\n\n提示：这是一个模拟 macOS 的终端。\n在 macOS 中，root 用户的家目录其实在 /var/root，而不是 /root。\n\n不过既然你找来了，送你一个金币 🪙",
+  },
 };
 
 function escapeHtml(s) {
@@ -86,14 +96,20 @@ export function useTerminal() {
 
   function initGame() {
     isGaming.value = true;
-    snake = [[10, 10], [10, 11], [10, 12]];
-    direction = 'UP';
+    snake = [
+      [10, 10],
+      [10, 11],
+      [10, 12],
+    ];
+    direction = "UP";
     gameScore = 0;
     spawnFood();
     outHtml('<span class="t-cyan t-bold">=== SNAKE GAME ===</span>');
-    outHtml('<span class="t-mute">Use W/A/S/D or Arrow keys to move. Press Q or Ctrl+C to quit.</span>');
+    outHtml(
+      '<span class="t-mute">Use W/A/S/D or Arrow keys to move. Press Q or Ctrl+C to quit.</span>',
+    );
     gameStartLineIdx = lines.value.length;
-    for (let i = 0; i < 20; i++) lines.value.push(''); // Reserve space for board
+    for (let i = 0; i < 20; i++) lines.value.push(""); // Reserve space for board
     gameInterval = setInterval(gameLoop, 150);
   }
 
@@ -102,33 +118,49 @@ export function useTerminal() {
     clearInterval(gameInterval);
     outHtml(`<span class="t-yellow">Game Over. Score: ${gameScore}</span>`);
     if (gameScore >= 50) {
-      outHtml(`<span class="t-green">Your logic is as solid as my code. Let's talk: dong_960010@163.com</span>`);
+      outHtml(
+        `<span class="t-green">Your logic is as solid as my code. Let's talk: dong_960010@163.com</span>`,
+      );
     }
   }
 
   function spawnFood() {
     while (true) {
       food = [Math.floor(Math.random() * 20), Math.floor(Math.random() * 20)];
-      if (!snake.some(segment => segment[0] === food[0] && segment[1] === food[1])) break;
+      if (
+        !snake.some(
+          (segment) => segment[0] === food[0] && segment[1] === food[1],
+        )
+      )
+        break;
     }
   }
 
   function gameLoop() {
     const head = snake[0];
     let newHead = [...head];
-    if (direction === 'UP') newHead[1]--;
-    if (direction === 'DOWN') newHead[1]++;
-    if (direction === 'LEFT') newHead[0]--;
-    if (direction === 'RIGHT') newHead[0]++;
+    if (direction === "UP") newHead[1]--;
+    if (direction === "DOWN") newHead[1]++;
+    if (direction === "LEFT") newHead[0]--;
+    if (direction === "RIGHT") newHead[0]++;
 
     // Wall collision
-    if (newHead[0] < 0 || newHead[0] >= 20 || newHead[1] < 0 || newHead[1] >= 20) {
+    if (
+      newHead[0] < 0 ||
+      newHead[0] >= 20 ||
+      newHead[1] < 0 ||
+      newHead[1] >= 20
+    ) {
       stopGame();
       return;
     }
 
     // Self collision
-    if (snake.some(segment => segment[0] === newHead[0] && segment[1] === newHead[1])) {
+    if (
+      snake.some(
+        (segment) => segment[0] === newHead[0] && segment[1] === newHead[1],
+      )
+    ) {
       stopGame();
       return;
     }
@@ -148,11 +180,13 @@ export function useTerminal() {
 
   function renderGame() {
     for (let y = 0; y < 20; y++) {
-      let row = '';
+      let row = "";
       for (let x = 0; x < 20; x++) {
         if (food[0] === x && food[1] === y) {
           row += '<span class="t-red">██</span>';
-        } else if (snake.some(segment => segment[0] === x && segment[1] === y)) {
+        } else if (
+          snake.some((segment) => segment[0] === x && segment[1] === y)
+        ) {
           row += '<span class="t-green">██</span>';
         } else {
           row += '<span class="t-mute">· </span>';
@@ -163,15 +197,19 @@ export function useTerminal() {
   }
 
   function handleGameInput(key) {
-    if (['ArrowUp', 'w', 'W'].includes(key) && direction !== 'DOWN') direction = 'UP';
-    if (['ArrowDown', 's', 'S'].includes(key) && direction !== 'UP') direction = 'DOWN';
-    if (['ArrowLeft', 'a', 'A'].includes(key) && direction !== 'RIGHT') direction = 'LEFT';
-    if (['ArrowRight', 'd', 'D'].includes(key) && direction !== 'LEFT') direction = 'RIGHT';
-    if (['q', 'Q'].includes(key)) stopGame();
+    if (["ArrowUp", "w", "W"].includes(key) && direction !== "DOWN")
+      direction = "UP";
+    if (["ArrowDown", "s", "S"].includes(key) && direction !== "UP")
+      direction = "DOWN";
+    if (["ArrowLeft", "a", "A"].includes(key) && direction !== "RIGHT")
+      direction = "LEFT";
+    if (["ArrowRight", "d", "D"].includes(key) && direction !== "LEFT")
+      direction = "RIGHT";
+    if (["q", "Q"].includes(key)) stopGame();
   }
 
   function cmdPlay(args) {
-    if (args[0] === 'snake') {
+    if (args[0] === "snake") {
       initGame();
     } else {
       outHtml('<span class="t-red">用法: play snake</span>');
@@ -236,13 +274,16 @@ export function useTerminal() {
   function init() {
     out("恭喜你完成了五轮验证，但这里从来没有放行入口。");
     out("你刚刚点过的每一个验证码，都只是流程演出的一部分。");
-    outHtml('现在，欢迎体验你的"奖励" —— 一个<s class="t-mute">什么都没有</s><span class="t-yellow t-bold">藏满秘密</span>的终端。');
+    outHtml(
+      '现在，欢迎体验你的"奖励" —— 一个<s class="t-mute">什么都没有</s><span class="t-yellow t-bold">藏满秘密</span>的终端。',
+    );
     out("");
 
-    const progressIdx = lines.value.length;
+    const progressLineId = Date.now();
     lines.value.push(
-      '<span class="t-mute">系统载入中 [........................................] 0%</span>',
+      `<span id="prog-${progressLineId}" class="t-mute">系统载入中 [........................................] 0%</span>`,
     );
+    const progressIdx = lines.value.length - 1;
     let p = 0;
 
     const interval = setInterval(() => {
@@ -251,22 +292,28 @@ export function useTerminal() {
       const empty = 40 - blocks;
       const blockStr = "█".repeat(blocks);
       const emptyStr = "░".repeat(empty);
+
+      // Update the progress line safely
       lines.value[progressIdx] =
-        `<span class="t-mute">系统载入中 [</span><span class="t-yellow">${blockStr}</span><span class="t-mute">${emptyStr}] ${String(p).padStart(3, " ")}%</span>`;
+        `<span id="prog-${progressLineId}" class="t-mute">系统载入中 [</span><span class="t-yellow">${blockStr}</span><span class="t-mute">${emptyStr}] ${String(p).padStart(3, " ")}%</span>`;
 
       if (p >= 100) {
         clearInterval(interval);
-        // Clean up the progress bar line to make terminal look clean
-        lines.value.splice(progressIdx, 1);
+        // Completely hide the progress line after completion
+        lines.value[progressIdx] = "";
         setTimeout(showAscii, 200);
       }
     }, 40);
 
     function showAscii() {
+      // Remove empty lines above ASCII to close the gap created by hiding the progress bar
+      if (lines.value[lines.value.length - 1] === "") {
+        lines.value.pop();
+      }
+
       outHtml(
         '<span class="t-mute">========================================================================</span>',
       );
-      out("");
       const art = [
         '<span class="t-cyan t-bold"> ____   ___  _   _  ____ ____  _   _  ____ _   _ _____ _   _  ____ </span>',
         '<span class="t-cyan t-bold">|  _ \\ / _ \\| \\ | |/ ___| __ )| | | |/ ___| | | | ____| \\ | |/ ___|</span>',
@@ -509,12 +556,14 @@ export function useTerminal() {
   }
 
   function cmdSudo(args, argStr) {
-    if (argStr.trim() === 'rm -rf /' || argStr.trim() === 'rm -rf /*') {
-      outHtml('<span class="t-red t-bold">⚠️ FATAL: INITIATING SYSTEM PURGE...</span>');
+    if (argStr.trim() === "rm -rf /" || argStr.trim() === "rm -rf /*") {
+      outHtml(
+        '<span class="t-red t-bold">⚠️ FATAL: INITIATING SYSTEM PURGE...</span>',
+      );
       triggerGlitch.value = true;
       return;
     }
-    
+
     outHtml('<span class="t-red">Password: </span>********');
     outHtml(
       `<span class="t-red">dong is not in the sudoers file. This incident will be reported.</span>`,
