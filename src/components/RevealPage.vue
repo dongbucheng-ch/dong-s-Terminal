@@ -1,0 +1,145 @@
+<template>
+  <div class="card reveal-card" ref="cardRef">
+    <div class="hdr">
+      <div class="spacer"></div>
+      <div class="badge danger">访问拒绝</div>
+      <div class="spacer end">
+        <div class="moon-btn" @click="toggleTheme">
+          <svg v-if="isDark" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg v-else viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </div>
+      </div>
+    </div>
+    <h1 class="title">你被耍了</h1>
+    <div class="reveal-text">
+      <p>恭喜你完成了五轮验证，但这里从来没有放行入口。</p>
+      <p>你刚刚点过的每一个验证码，都只是流程演出的一部分。</p>
+      <p>现在，欢迎体验你的"奖励" —— 一个什么都没有的终端。</p>
+    </div>
+    <MacTerminal />
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import MacTerminal from './MacTerminal.vue'
+import { useTilt } from '../composables/useTilt.js'
+import { useTheme } from '../composables/useTheme.js'
+
+const { isDark, toggleTheme } = useTheme()
+const cardRef = ref(null)
+useTilt(cardRef)
+</script>
+
+<style scoped>
+.card {
+  position: relative; z-index: 1;
+  width: 92%; max-width: 800px;
+  padding: 36px 48px 40px;
+  border-radius: 8px; /* Sharper edges */
+  background: rgba(10, 12, 16, 0.9); /* Darker, more opaque */
+  border: 3px solid rgba(255, 68, 0, 0.2); /* Hot Orange accent border */
+  box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 68, 0, 0.05);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+}
+/* Industrial top bar accent */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: #ff4400; /* Hot Orange */
+  z-index: 2;
+  transition: all 0.5s ease-in-out;
+}
+
+.hdr {
+  display: flex; align-items: flex-start; margin-bottom: 8px;
+}
+.spacer { flex: 1; }
+.spacer.end { display: flex; justify-content: flex-end; }
+
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 7px 18px; border-radius: 18px;
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.6px; white-space: nowrap;
+  transition: all 0.5s ease-in-out;
+}
+.badge.danger {
+  background: rgba(220,60,80,0.18);
+  border: 3px solid rgba(255,90,110,0.35);
+  color: #ffa0b0;
+}
+
+.moon-btn {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  border: 3px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+.moon-btn:hover { background: rgba(255,255,255,0.08); }
+.moon-btn svg {
+  width: 18px; height: 18px; fill: none;
+  stroke: rgba(200,215,240,0.5); stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  transition: stroke 0.5s ease-in-out;
+}
+
+.title {
+  font-size: 38px; font-weight: 900;
+  text-align: center; margin-bottom: 16px;
+  letter-spacing: -0.3px;
+  transition: color 0.5s ease-in-out;
+}
+
+.reveal-text {
+  text-align: center; margin-bottom: 24px;
+}
+.reveal-text p {
+  font-size: 14.5px; color: rgba(200,210,230,0.5);
+  line-height: 2; margin: 0;
+  transition: color 0.5s ease-in-out;
+}
+
+/* --- Light Theme --- */
+:global(.light-theme .card) {
+  background: #FFFFFF;
+  border: 3px solid #333333;
+  box-shadow: 4px 4px 0 #1A1A1A;
+  border-radius: 0;
+}
+:global(.light-theme .badge.danger) {
+  background: #FF9800;
+  border: 2px solid #333333;
+  color: #1A1A1A;
+  font-family: monospace;
+  font-weight: 900;
+  border-radius: 0;
+}
+:global(.light-theme .moon-btn) {
+  background: transparent;
+  border: 2px solid #333333;
+  border-radius: 0;
+}
+:global(.light-theme .moon-btn:hover) { background: rgba(51, 51, 51, 0.05); }
+:global(.light-theme .moon-btn svg) { stroke: #333333; }
+:global(.light-theme .title) { 
+  color: #1A1A1A; 
+  font-style: italic;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+}
+:global(.light-theme .reveal-text p) { color: #666666; font-family: monospace; }
+:global(.light-theme .card::before) { background: #FF9800; height: 6px; }
+
+@media (max-width: 640px) {
+  .card { padding: 28px 20px 28px; border-radius: 18px; max-width: 100%; }
+  .title { font-size: 30px; }
+  .reveal-text p { font-size: 13px; }
+}
+</style>
