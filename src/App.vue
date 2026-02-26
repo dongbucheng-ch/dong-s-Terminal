@@ -65,4 +65,43 @@ html.light-theme body {
 @keyframes pageOut {
   to { opacity: 0; transform: translateY(-14px) scale(0.98); }
 }
+
+/* --- Global Glitch Mode --- */
+html.glitch-mode body {
+  animation: glitch-bg 0.2s linear infinite;
+}
+html.glitch-mode #app {
+  animation: glitch-shake 0.3s cubic-bezier(.36,.07,.19,.97) infinite;
+  filter: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="glitch"><feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" /></filter></svg>#glitch');
+}
+html.glitch-mode .card, html.glitch-mode .terminal {
+  box-shadow: -10px 0 0 rgba(255,0,0,0.8), 10px 0 0 rgba(0,255,255,0.8);
+  animation: rgb-shift 0.1s infinite alternate;
+}
+
+@keyframes glitch-bg {
+  0% { background: #000; }
+  50% { background: #080c18; }
+  100% { background: #1a0000; }
+}
+@keyframes glitch-shake {
+  0% { transform: translate(2px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(0px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(2px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(2px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+@keyframes rgb-shift {
+  0% { transform: skewX(0deg); }
+  10% { transform: skewX(-2deg); }
+  20% { transform: skewX(0deg); }
+  30% { transform: skewX(1deg); }
+  40% { transform: skewX(0deg); }
+}
 </style>

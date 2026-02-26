@@ -19,7 +19,7 @@
         v-html="line"
       ></div>
       <!-- Input line -->
-      <div class="line input-line" v-if="terminal.ready.value">
+      <div class="line input-line" v-if="terminal.ready.value && !terminal.isGaming.value">
         <span v-html="terminal.promptHtml.value"></span>
         <span>{{ currentInput }}</span>
         <span class="cursor" :class="{ blink: focused }">█</span>
@@ -42,15 +42,22 @@
 import { ref, watch, nextTick, onMounted, onUnmounted } from "vue";
 import { useTerminal } from "../composables/useTerminal.js";
 import { useTilt } from "../composables/useTilt.js";
+import { useTheme } from "../composables/useTheme.js";
 
 const terminal = useTerminal();
+const { triggerGlitch } = useTheme();
 const currentInput = ref("");
 const focused = ref(true);
 const bodyRef = ref(null);
 const inputRef = ref(null);
+const snakeGameActive = ref(false);
 
 const terminalRef = ref(null);
 useTilt(terminalRef);
+
+watch(() => terminal.triggerGlitch.value, (val) => {
+  if (val) triggerGlitch();
+})
 
 function focusInput() {
   inputRef.value?.focus();
@@ -64,6 +71,12 @@ function scrollToBottom() {
 }
 
 function onKeyDown(e) {
+  if (terminal.isGaming.value) {
+    e.preventDefault();
+    terminal.handleGameInput(e.key);
+    return;
+  }
+
   if (e.key === "Enter") {
     e.preventDefault();
     terminal.exec(currentInput.value);

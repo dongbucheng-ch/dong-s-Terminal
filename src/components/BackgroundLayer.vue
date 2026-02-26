@@ -223,6 +223,18 @@ onUnmounted(() => {
   transition: opacity 0.5s ease-in-out;
 }
 
+/* Glitch Overrides */
+:global(.glitch-mode .bg-grid) {
+  animation: bgGridSlide 0.1s linear infinite !important;
+  background-image:
+    linear-gradient(rgba(255, 0, 0, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.5) 1px, transparent 1px);
+}
+:global(.glitch-mode .orb) {
+  animation-duration: 0.5s !important;
+  filter: blur(20px) hue-rotate(90deg);
+}
+
 /* --- Light Theme --- */
 :global(.light-theme .bg) { background: #FFFFFF; }
 :global(.light-theme .bg-base) {

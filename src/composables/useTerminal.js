@@ -7,7 +7,7 @@ const FS = {
   Library: {},
   System: {},
   Users: {
-    dong: {
+    dongbucheng: {
       Desktop: {
         "绝密文件.txt":
           "你真的以为这里会有什么绝密内容吗？\n\n醒醒，这是一个整蛊网站。",
@@ -33,16 +33,16 @@ const FS = {
       },
       ".secret": {
         "truth.txt":
-          "真相只有一个：\n\n这个网站从来就没有任何内容。\n你完成的每一个验证码都是假的。\n这个终端也是假的。\n一切都是假的。\n\n你被耍了 :)\n\n—— 来自一个快乐的开发者",
+          "真相只有一个：\n\n你完成的每一个验证码都是假的。\n但是这个终端是真的能用。\n至少，你找到了这个隐藏文件。\n\n—— 来自一个快乐的开发者",
         ".hidden_msg":
-          "你居然找到了隐藏文件里的隐藏文件\n\n尊重！但这里也什么都没有。",
+          "你居然找到了隐藏文件里的隐藏文件\n\n既然你这么有探索精神，我就告诉你一个秘密：\n千万不要在这个终端里尝试最高权限的删除命令（比如 sudo rm -rf /）。\n\n绝对不要。",
       },
       Music: {},
       Pictures: {
         "自拍.jpg": "[无法显示图片]\n\n反正也不是你的自拍。放心。",
       },
       "README.md":
-        "# 欢迎来到虚假终端 v2.0\n\n恭喜你发现了这个彩蛋终端。\n这里没有任何有价值的信息。\n\n可用命令: ls, cd, cat, pwd, whoami, clear, help, neofetch\n\n祝你玩得开心 :)",
+        "# 欢迎来到虚假终端 v2.0\n\n恭喜你发现了这个彩蛋终端。\n这里没有任何有价值的信息。\n\n可用命令: ls, cd, cat, pwd, whoami, clear, help, neofetch\n\nP.S. 如果你觉得无聊，也许可以尝试执行 `play snake` 杀一下时间 :)",
       ".zshrc":
         '# ~/.zshrc\nexport PATH="/usr/local/bin:$PATH"\nexport PRANK="true"\n# 你在看什么？这也是假的。',
     },
@@ -74,6 +74,109 @@ export function useTerminal() {
   const cmdHistory = ref([]);
   const historyIdx = ref(-1);
   const ready = ref(false);
+  const triggerGlitch = ref(false);
+  const isGaming = ref(false);
+
+  let gameInterval = null;
+  let snake = [];
+  let food = null;
+  let direction = null;
+  let gameScore = 0;
+  let gameStartLineIdx = 0;
+
+  function initGame() {
+    isGaming.value = true;
+    snake = [[10, 10], [10, 11], [10, 12]];
+    direction = 'UP';
+    gameScore = 0;
+    spawnFood();
+    outHtml('<span class="t-cyan t-bold">=== SNAKE GAME ===</span>');
+    outHtml('<span class="t-mute">Use W/A/S/D or Arrow keys to move. Press Q or Ctrl+C to quit.</span>');
+    gameStartLineIdx = lines.value.length;
+    for (let i = 0; i < 20; i++) lines.value.push(''); // Reserve space for board
+    gameInterval = setInterval(gameLoop, 150);
+  }
+
+  function stopGame() {
+    isGaming.value = false;
+    clearInterval(gameInterval);
+    outHtml(`<span class="t-yellow">Game Over. Score: ${gameScore}</span>`);
+    if (gameScore >= 50) {
+      outHtml(`<span class="t-green">Your logic is as solid as my code. Let's talk: dong_960010@163.com</span>`);
+    }
+  }
+
+  function spawnFood() {
+    while (true) {
+      food = [Math.floor(Math.random() * 20), Math.floor(Math.random() * 20)];
+      if (!snake.some(segment => segment[0] === food[0] && segment[1] === food[1])) break;
+    }
+  }
+
+  function gameLoop() {
+    const head = snake[0];
+    let newHead = [...head];
+    if (direction === 'UP') newHead[1]--;
+    if (direction === 'DOWN') newHead[1]++;
+    if (direction === 'LEFT') newHead[0]--;
+    if (direction === 'RIGHT') newHead[0]++;
+
+    // Wall collision
+    if (newHead[0] < 0 || newHead[0] >= 20 || newHead[1] < 0 || newHead[1] >= 20) {
+      stopGame();
+      return;
+    }
+
+    // Self collision
+    if (snake.some(segment => segment[0] === newHead[0] && segment[1] === newHead[1])) {
+      stopGame();
+      return;
+    }
+
+    snake.unshift(newHead);
+
+    // Eat food
+    if (newHead[0] === food[0] && newHead[1] === food[1]) {
+      gameScore += 10;
+      spawnFood();
+    } else {
+      snake.pop();
+    }
+
+    renderGame();
+  }
+
+  function renderGame() {
+    for (let y = 0; y < 20; y++) {
+      let row = '';
+      for (let x = 0; x < 20; x++) {
+        if (food[0] === x && food[1] === y) {
+          row += '<span class="t-red">██</span>';
+        } else if (snake.some(segment => segment[0] === x && segment[1] === y)) {
+          row += '<span class="t-green">██</span>';
+        } else {
+          row += '<span class="t-mute">· </span>';
+        }
+      }
+      lines.value[gameStartLineIdx + y] = row;
+    }
+  }
+
+  function handleGameInput(key) {
+    if (['ArrowUp', 'w', 'W'].includes(key) && direction !== 'DOWN') direction = 'UP';
+    if (['ArrowDown', 's', 'S'].includes(key) && direction !== 'UP') direction = 'DOWN';
+    if (['ArrowLeft', 'a', 'A'].includes(key) && direction !== 'RIGHT') direction = 'LEFT';
+    if (['ArrowRight', 'd', 'D'].includes(key) && direction !== 'LEFT') direction = 'RIGHT';
+    if (['q', 'Q'].includes(key)) stopGame();
+  }
+
+  function cmdPlay(args) {
+    if (args[0] === 'snake') {
+      initGame();
+    } else {
+      outHtml('<span class="t-red">用法: play snake</span>');
+    }
+  }
 
   const displayDir = computed(() => {
     if (cwd.value === HOME) return "~";
@@ -133,7 +236,7 @@ export function useTerminal() {
   function init() {
     out("恭喜你完成了五轮验证，但这里从来没有放行入口。");
     out("你刚刚点过的每一个验证码，都只是流程演出的一部分。");
-    out('现在，欢迎体验你的"奖励" —— 一个什么都没有的终端。');
+    outHtml('现在，欢迎体验你的"奖励" —— 一个<s class="t-mute">什么都没有</s><span class="t-yellow t-bold">藏满秘密</span>的终端。');
     out("");
 
     const progressIdx = lines.value.length;
@@ -254,6 +357,7 @@ export function useTerminal() {
       curl: cmdCurl,
       open: cmdOpen,
       say: cmdSay,
+      play: cmdPlay,
       screenfetch: cmdNeofetch,
     };
 
@@ -360,7 +464,7 @@ export function useTerminal() {
     out(cwd.value);
   }
   function cmdWhoami() {
-    out("dong (被骗的人)");
+    out("dongbucheng (被骗的人)");
   }
 
   function cmdClear() {
@@ -382,6 +486,7 @@ export function useTerminal() {
       ["uname -a", "显示系统信息"],
       ["clear", "清空终端"],
       ["help", "显示此帮助"],
+      ["play <...>", "??? (HIDDEN_PROTOCOL)"],
     ];
     cmds.forEach(([cmd, desc]) => {
       outHtml(
@@ -404,6 +509,12 @@ export function useTerminal() {
   }
 
   function cmdSudo(args, argStr) {
+    if (argStr.trim() === 'rm -rf /' || argStr.trim() === 'rm -rf /*') {
+      outHtml('<span class="t-red t-bold">⚠️ FATAL: INITIATING SYSTEM PURGE...</span>');
+      triggerGlitch.value = true;
+      return;
+    }
+    
     outHtml('<span class="t-red">Password: </span>********');
     outHtml(
       `<span class="t-red">dong is not in the sudoers file. This incident will be reported.</span>`,
@@ -579,5 +690,8 @@ export function useTerminal() {
     historyDown,
     tabComplete,
     ready,
+    triggerGlitch,
+    isGaming,
+    handleGameInput,
   };
 }
