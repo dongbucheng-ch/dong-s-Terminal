@@ -353,7 +353,7 @@ export function useTerminal({ skippedVerify = false } = {}) {
             '<span class="t-yellow">⚠ 所有操作将被记录。输入 help 查看可用命令。</span>',
           );
           outHtml(
-            '<span class="t-blue">💡 提示: 输入 </span><span class="t-green">cat Desktop/resume.md</span><span class="t-blue"> 查看我的简历。</span>',
+            '<span class="t-blue">💡 提示: 输入 </span><span class="t-green">cat Desktop/resume.md</span><span class="t-blue"> 查看我的简历。</span><s class="t-mute">( 球球了，捞捞我) </s>',
           );
           out("");
           ready.value = true;
@@ -698,38 +698,52 @@ export function useTerminal({ skippedVerify = false } = {}) {
       outHtml('<span class="t-yellow">Usage: chat &lt;message&gt;</span>');
       return;
     }
-    
+
     // Simulate thinking delay
     isGaming.value = true; // Temporarily block input while "admin" is typing
     outHtml(`<span class="t-mute">Connecting to secure channel...</span>`);
-    
+
     setTimeout(() => {
       outHtml(`<span class="t-green">Connection established.</span>`);
-      
+
       setTimeout(() => {
         let reply = "";
         const msg = argStr.toLowerCase();
-        
-        if (msg.includes("hello") || msg.includes("hi") || msg.includes("你好")) {
-          reply = "System Administrator is currently AFK... Wait, who are you and how did you get here?";
+
+        if (
+          msg.includes("hello") ||
+          msg.includes("hi") ||
+          msg.includes("你好")
+        ) {
+          reply =
+            "System Administrator is currently AFK... Wait, who are you and how did you get here?";
         } else if (msg.includes("who are you") || msg.includes("你是谁")) {
           reply = "I'm the watchdog of this server. You shouldn't be here.";
         } else if (msg.includes("admin") || msg.includes("root")) {
           reply = "Nice try. Access denied.";
-        } else if (msg.includes("fuck") || msg.includes("shit") || msg.includes("sb")) {
-          reply = "Language! Your IP has been logged and reported to the cyber police.";
+        } else if (
+          msg.includes("fuck") ||
+          msg.includes("shit") ||
+          msg.includes("sb")
+        ) {
+          reply =
+            "Language! Your IP has been logged and reported to the cyber police.";
         } else {
           reply = `I am receiving your message: "${escapeHtml(argStr)}", but I have strict orders not to engage with intruders.`;
         }
 
-        outHtml(`<span class="t-red t-bold">&gt; Admin:</span> <span class="t-red">${reply}</span>`);
+        outHtml(
+          `<span class="t-red t-bold">&gt; Admin:</span> <span class="t-red">${reply}</span>`,
+        );
         isGaming.value = false; // Release input block
       }, 1500); // Admin "typing" time
     }, 800); // Connection time
   }
 
   function injectAdminMessage() {
-    outHtml('<span class="t-red t-bold">&gt; System Admin:</span> <span class="t-red">Are you still there? The connection is getting stale...</span>');
+    outHtml(
+      '<span class="t-red t-bold">&gt; System Admin:</span> <span class="t-red">Are you still there? The connection is getting stale...</span>',
+    );
   }
 
   // ── History navigation ──
