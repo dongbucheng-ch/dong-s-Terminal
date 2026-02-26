@@ -22,13 +22,8 @@
         </div>
       </div>
     </div>
-    <h1 class="title">你被耍了</h1>
-    <div class="reveal-text">
-      <p>恭喜你完成了五轮验证，但这里从来没有放行入口。</p>
-      <p>你刚刚点过的每一个验证码，都只是流程演出的一部分。</p>
-      <p>现在，欢迎体验你的"奖励" —— 一个什么都没有的终端。</p>
-    </div>
-    <MacTerminal />
+    <h1 class="title">YOU GOT PRANKED</h1>
+    <MacTerminal style="flex: 1; min-height: 400px;" />
   </div>
 </template>
 

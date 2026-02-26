@@ -15,6 +15,10 @@
         <div class="widget-wrap">
           <div class="wg-box" ref="wgBox"></div>
           <p class="warn" :class="{ show: showWarning, 'error-color': isErrorColor }">{{ warningText }}</p>
+          <div class="status-indicator">
+            <span v-if="isLoading" class="status-text loading">正在建立安全连接...</span>
+            <span v-if="isFailed" class="status-text failed">组件加载失败或环境异常</span>
+          </div>
         </div>
         <hr class="sep">
         <p class="hint">{{ currentStep.hint }}</p>
@@ -43,6 +47,8 @@ const isShaking = ref(false)
 const isErrorColor = ref(false)
 const wgBox = ref(null)
 const transitioning = ref(false)
+const isLoading = ref(true)
+const isFailed = ref(false)
 
 let turnstileReady = false
 let recaptchaReady = false
@@ -81,6 +87,9 @@ function renderWidget() {
   el.id = 'wg-' + stepIdx.value + '-' + Date.now()
   box.appendChild(el)
 
+  isLoading.value = true
+  isFailed.value = false
+
   const s = currentStep.value
   if (s.widget === 'turnstile') {
     const go = () => {
@@ -88,10 +97,19 @@ function renderWidget() {
         window.turnstile.render(el, {
           sitekey: CFG.turnstileKey,
           callback: onVerified,
-          theme: 'dark',
+          'error-callback': () => { isFailed.value = true; isLoading.value = false },
+          'expired-callback': () => { isFailed.value = true; isLoading.value = false },
+          theme: isDark.value ? 'dark' : 'light',
           language: 'zh-cn',
         })
-      } catch (e) { console.warn('Turnstile error:', e) }
+        // Turnstile doesn't have a reliable generic load callback before render completes in some network states, 
+        // so we'll just optimistically hide the loader after a short delay assuming the iframe popped in
+        setTimeout(() => { isLoading.value = false }, 800)
+      } catch (e) { 
+        console.warn('Turnstile error:', e)
+        isFailed.value = true
+        isLoading.value = false
+      }
     }
     turnstileReady ? go() : turnstileQueue.push(go)
   } else {
@@ -100,9 +118,15 @@ function renderWidget() {
         window.grecaptcha.render(el.id, {
           sitekey: CFG.recaptchaKey,
           callback: onVerified,
-          theme: 'light',
+          'error-callback': () => { isFailed.value = true; isLoading.value = false },
+          theme: isDark.value ? 'dark' : 'light',
         })
-      } catch (e) { console.warn('reCAPTCHA error:', e) }
+        setTimeout(() => { isLoading.value = false }, 800)
+      } catch (e) { 
+        console.warn('reCAPTCHA error:', e) 
+        isFailed.value = true
+        isLoading.value = false
+      }
     }
     recaptchaReady ? go() : recaptchaQueue.push(go)
   }
@@ -195,8 +219,15 @@ onMounted(() => {
 .moon-btn svg { width:18px; height:18px; fill:none; stroke:rgba(200,215,240,0.5); stroke-width:2; stroke-linecap:round; stroke-linejoin:round; transition: stroke 0.5s ease-in-out; }
 .title { font-size:34px; font-weight:900; line-height:1.35; margin-bottom:10px; letter-spacing:-0.3px; transition: color 0.5s ease-in-out; }
 .desc { font-size:15.5px; color:rgba(200,210,230,0.55); line-height:1.65; margin-bottom:36px; transition: color 0.5s ease-in-out; }
-.widget-wrap { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; min-height:120px; }
+.widget-wrap { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; min-height:120px; position: relative; }
 .wg-box { display:flex; align-items:center; justify-content:center; min-height:74px; }
+.status-indicator { position: absolute; bottom: 0; left: 0; }
+.status-text { font-size: 11px; font-family: monospace; letter-spacing: 0.5px; opacity: 0.6; transition: color 0.5s ease; }
+.status-text.loading { color: #57c7ff; animation: pulse 1.5s infinite; }
+.status-text.failed { color: #ff5a6e; }
+:global(.light-theme .status-text.loading) { color: #0b72ba; }
+:global(.light-theme .status-text.failed) { color: #d62f2f; }
+@keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
 .warn {
   font-size:15px; font-weight:500; color:#f0a050;
   min-height:24px; text-align:center;

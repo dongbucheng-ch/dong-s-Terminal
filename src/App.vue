@@ -39,7 +39,7 @@ onUnmounted(() => {
 
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; height: 100%; overflow: hidden; }
+html, body { width: 100%; height: 100%; overflow: auto; }
 body {
   font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #080c18;
@@ -51,8 +51,9 @@ html.light-theme body {
   color: #111;
 }
 #app {
-  width: 100%; height: 100%;
+  width: 100%; min-height: 100%;
   display: flex; align-items: center; justify-content: center;
+  padding: 40px 0;
 }
 
 .page-enter-active { animation: pageIn 0.55s cubic-bezier(.22,1,.36,1) both; }
