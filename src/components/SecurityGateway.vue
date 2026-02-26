@@ -21,7 +21,12 @@
           </div>
         </div>
         <hr class="sep">
-        <p class="hint">{{ currentStep.hint }}</p>
+        <div class="footer-wrap">
+          <p class="hint">{{ currentStep.hint }}</p>
+          <div class="shortcut-hint" title="Bypass verification">
+            <span class="kbd">⌘</span>+<span class="kbd">X</span>
+          </div>
+        </div>
       </div>
     </Transition>
   </div>
@@ -238,6 +243,32 @@ onMounted(() => {
 .warn.show { opacity:1; transform:translateY(0); }
 .sep { border:none; border-top:1px dashed rgba(140,170,220,0.12); margin:auto 0 14px 0; width:100%; transition: border-color 0.5s ease-in-out; }
 .hint { font-size:13.5px; color:rgba(160,175,200,0.35); line-height:1.6; transition: color 0.5s ease-in-out; }
+
+.footer-wrap { display: flex; justify-content: space-between; align-items: center; }
+.shortcut-hint {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; color: rgba(160,175,200,0.2);
+  font-family: monospace; cursor: help;
+  transition: opacity 0.3s;
+}
+.shortcut-hint:hover { opacity: 1; color: rgba(160,175,200,0.6); }
+.kbd {
+  display: inline-block;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+}
+
+:global(.light-theme .shortcut-hint) { color: rgba(51,51,51,0.3); }
+:global(.light-theme .shortcut-hint:hover) { color: rgba(51,51,51,0.8); }
+:global(.light-theme .kbd) {
+  background: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  box-shadow: 0 2px 0 #c0c0c0;
+  border-radius: 2px;
+}
 
 .shake {
   animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
