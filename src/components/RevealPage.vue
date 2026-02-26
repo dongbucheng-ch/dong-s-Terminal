@@ -23,7 +23,7 @@
       </div>
     </div>
     <h1 class="title">YOU GOT PRANKED</h1>
-    <MacTerminal style="flex: 1; min-height: 400px;" />
+    <MacTerminal style="flex: 1; min-height: 400px;" :skipped-verify="skippedVerify" />
   </div>
 </template>
 
@@ -32,6 +32,10 @@ import { ref } from "vue";
 import MacTerminal from "./MacTerminal.vue";
 import { useTilt } from "../composables/useTilt.js";
 import { useTheme } from "../composables/useTheme.js";
+
+const props = defineProps({
+  skippedVerify: Boolean,
+});
 
 const { isDark, toggleTheme } = useTheme();
 const cardRef = ref(null);

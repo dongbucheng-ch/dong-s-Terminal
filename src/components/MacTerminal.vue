@@ -44,7 +44,11 @@ import { useTerminal } from "../composables/useTerminal.js";
 import { useTilt } from "../composables/useTilt.js";
 import { useTheme } from "../composables/useTheme.js";
 
-const terminal = useTerminal();
+const props = defineProps({
+  skippedVerify: Boolean,
+});
+
+const terminal = useTerminal({ skippedVerify: props.skippedVerify });
 const { triggerGlitch } = useTheme();
 const currentInput = ref("");
 const focused = ref(true);

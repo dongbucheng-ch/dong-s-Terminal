@@ -78,7 +78,7 @@ function escapeHtml(s) {
     .replace(/"/g, "&quot;");
 }
 
-export function useTerminal() {
+export function useTerminal({ skippedVerify = false } = {}) {
   const lines = ref([]);
   const cwd = ref(HOME);
   const cmdHistory = ref([]);
@@ -272,8 +272,13 @@ export function useTerminal() {
 
   // ── Welcome message ──
   function init() {
-    out("恭喜你完成了五轮验证，但这里从来没有放行入口。");
-    out("你刚刚点过的每一个验证码，都只是流程演出的一部分。");
+    if (skippedVerify) {
+      out("你找到了隐藏的快捷入口，直接跳过了五轮验证。");
+      out("不过别高兴太早，这里也没有什么真正有价值的东西。");
+    } else {
+      out("恭喜你完成了五轮验证，但这里从来没有放行入口。");
+      out("你刚刚点过的每一个验证码，都只是流程演出的一部分。");
+    }
     outHtml(
       '现在，欢迎体验你的"奖励" —— 一个<s class="t-mute">什么都没有</s><span class="t-yellow t-bold">藏满秘密</span>的终端。',
     );

@@ -2,7 +2,7 @@
   <BackgroundLayer />
   <Transition name="page" mode="out-in">
     <SecurityGateway v-if="phase === 'verify'" key="verify" @complete="onComplete" />
-    <RevealPage v-else key="reveal" />
+    <RevealPage v-else key="reveal" :skipped-verify="skippedVerify" />
   </Transition>
 </template>
 
@@ -13,6 +13,7 @@ import SecurityGateway from './components/SecurityGateway.vue'
 import RevealPage from './components/RevealPage.vue'
 
 const phase = ref('verify')
+const skippedVerify = ref(false)
 
 function onComplete() {
   phase.value = 'reveal'
@@ -23,6 +24,7 @@ function handleGlobalKeydown(e) {
   if (e.key === 'x' && (e.ctrlKey || e.metaKey)) {
     e.preventDefault()
     if (phase.value !== 'reveal') {
+      skippedVerify.value = true
       onComplete()
     }
   }
