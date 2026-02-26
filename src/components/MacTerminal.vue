@@ -357,7 +357,6 @@ onUnmounted(() => {
 @media (max-width: 640px) {
   .body {
     font-size: 11px;
-    max-height: 280px;
     padding: 8px 10px;
   }
   .title-bar {
