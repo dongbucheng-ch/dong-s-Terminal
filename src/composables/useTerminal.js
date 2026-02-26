@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 
-const HOME = "/Users/dong";
+const HOME = "/Users/dongbucheng";
 
 const FS = {
   Applications: {},
@@ -49,10 +49,9 @@ const FS = {
     Shared: {},
   },
   etc: {
-    hosts:
-      "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n127.0.0.1\tyou-got-pranked.com",
+    hosts: "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n127.0.0.1\tdongbucheng.com",
     passwd:
-      "root:*:0:0:System Administrator:/var/root:/bin/sh\ndong:*:501:20:被骗的人:/Users/dong:/bin/zsh",
+      "root:*:0:0:System Administrator:/var/root:/bin/sh\ndong:*:501:20:被骗的人:/Users/dongbucheng:/bin/zsh",
   },
   tmp: {
     ".debug.log":
@@ -138,17 +137,20 @@ export function useTerminal() {
     out("");
 
     const progressIdx = lines.value.length;
-    lines.value.push('<span class="t-mute">系统载入中 [........................................] 0%</span>');
+    lines.value.push(
+      '<span class="t-mute">系统载入中 [........................................] 0%</span>',
+    );
     let p = 0;
 
     const interval = setInterval(() => {
       p += 2;
       const blocks = Math.floor(p / 2.5);
       const empty = 40 - blocks;
-      const blockStr = '█'.repeat(blocks);
-      const emptyStr = '░'.repeat(empty);
-      lines.value[progressIdx] = `<span class="t-mute">系统载入中 [</span><span class="t-yellow">${blockStr}</span><span class="t-mute">${emptyStr}] ${String(p).padStart(3, ' ')}%</span>`;
-      
+      const blockStr = "█".repeat(blocks);
+      const emptyStr = "░".repeat(empty);
+      lines.value[progressIdx] =
+        `<span class="t-mute">系统载入中 [</span><span class="t-yellow">${blockStr}</span><span class="t-mute">${emptyStr}] ${String(p).padStart(3, " ")}%</span>`;
+
       if (p >= 100) {
         clearInterval(interval);
         // Clean up the progress bar line to make terminal look clean
@@ -158,7 +160,9 @@ export function useTerminal() {
     }, 40);
 
     function showAscii() {
-      outHtml('<span class="t-mute">========================================================================</span>');
+      outHtml(
+        '<span class="t-mute">========================================================================</span>',
+      );
       out("");
       const art = [
         '<span class="t-cyan t-bold"> ____   ___  _   _  ____ ____  _   _  ____ _   _ _____ _   _  ____ </span>',
@@ -169,7 +173,9 @@ export function useTerminal() {
       ];
       art.forEach((a) => outHtml(a));
       out("");
-      outHtml('<span class="t-mute">========================================================================</span>');
+      outHtml(
+        '<span class="t-mute">========================================================================</span>',
+      );
       out("");
 
       const now = new Date();
