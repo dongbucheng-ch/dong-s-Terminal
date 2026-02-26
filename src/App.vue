@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import BackgroundLayer from './components/BackgroundLayer.vue'
 import SecurityGateway from './components/SecurityGateway.vue'
 import RevealPage from './components/RevealPage.vue'
@@ -18,6 +18,23 @@ function onComplete() {
   phase.value = 'reveal'
   document.title = '你被耍了 :)'
 }
+
+function handleGlobalKeydown(e) {
+  if (e.key === 'x' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault()
+    if (phase.value !== 'reveal') {
+      onComplete()
+    }
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleGlobalKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleGlobalKeydown)
+})
 </script>
 
 <style>

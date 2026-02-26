@@ -64,6 +64,10 @@ function onKeyDown(e) {
     terminal.exec(currentInput.value)
     currentInput.value = ''
     scrollToBottom()
+  } else if (e.key === 'Tab') {
+    e.preventDefault()
+    const completion = terminal.tabComplete(currentInput.value)
+    if (completion !== null) currentInput.value = completion
   } else if (e.key === 'ArrowUp') {
     e.preventDefault()
     const prev = terminal.historyUp()
@@ -205,10 +209,10 @@ onUnmounted(() => {
   background: #FFFFFF;
   border-bottom: 3px solid #333333;
 }
-:global(.light-theme .light) { border-radius: 0; border: 2px solid #333333; width: 12px; height: 12px; }
+:global(.light-theme .light) { border-radius: 0; border: 2px solid #333333; width: 14px; height: 14px; }
 :global(.light-theme .light.close) { background: #FF9800; } /* Accent orange */
 :global(.light-theme .light.minimize) { background: #FFFFFF; }
-:global(.light-theme .light.maximize) { background: #1A1A1A; }
+:global(.light-theme .light.maximize) { background: #333333; }
 :global(.light-theme .title-text) { 
   color: #1A1A1A; 
   font-family: monospace; 
@@ -226,17 +230,17 @@ onUnmounted(() => {
 :deep(.t-green) { color: #5af78e; }
 :global(.light-theme) :deep(.t-green) { color: #333333; }
 :deep(.t-blue) { color: #57c7ff; }
-:global(.light-theme) :deep(.t-blue) { color: #1A1A1A; text-decoration: underline; }
+:global(.light-theme) :deep(.t-blue) { color: #57c7ff; font-style: italic; }
 :deep(.t-red) { color: #ff6b6b; }
 :global(.light-theme) :deep(.t-red) { color: #FFFFFF; background: #FF9800; display: inline-block; padding: 0 4px; }
 :deep(.t-yellow) { color: #f3f99d; }
-:global(.light-theme) :deep(.t-yellow) { color: #FF9800; font-weight: 900; }
+:global(.light-theme) :deep(.t-yellow) { color: #1a1a1a; background: #e5ff00; padding: 0 4px; display: inline-block; font-style: italic; }
 :deep(.t-magenta) { color: #ff6ac1; }
 :global(.light-theme) :deep(.t-magenta) { color: #1A1A1A; background: rgba(255,152,0,0.2); }
 :deep(.t-cyan) { color: #9aedfe; }
-:global(.light-theme) :deep(.t-cyan) { color: #333333; font-style: italic; }
+:global(.light-theme) :deep(.t-cyan) { color: #333333; }
 :deep(.t-mute) { color: #666; }
-:global(.light-theme) :deep(.t-mute) { color: #999999; }
+:global(.light-theme) :deep(.t-mute) { color: #888888; font-style: italic; }
 :deep(.t-bold) { font-weight: bold; color: #fff; }
 :global(.light-theme) :deep(.t-bold) { color: #1A1A1A; font-weight: 900; }
 

@@ -182,17 +182,11 @@ useTilt(cardRef);
   font-style: italic;
   font-weight: 900;
   letter-spacing: -0.05em;
-  text-decoration: underline;
-  text-decoration-thickness: 4px;
-  text-underline-offset: 4px;
 }
 :global(.light-theme .reveal-text p) { 
   color: #666666; 
   font-family: monospace; 
   font-style: italic;
-  text-decoration: underline;
-  text-decoration-color: rgba(51,51,51,0.3);
-  text-underline-offset: 4px;
 }
 :global(.light-theme .card::before) {
   background: #ff9800;

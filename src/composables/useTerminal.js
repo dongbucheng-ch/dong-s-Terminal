@@ -344,7 +344,31 @@ export function useTerminal() {
     return ''
   }
 
+  // ── Tab completion ──
+  function tabComplete(input) {
+    const parts = input.split(' ')
+    if (parts.length === 0) return null
+    const lastPart = parts[parts.length - 1]
+    
+    // We only support auto-completing files/directories in the current dir for now
+    // to keep it simple for the prank
+    if (lastPart.includes('/')) return null // Too complex for fake FS right now
+    
+    const node = getNode(cwd.value)
+    if (!isDir(node)) return null
+    
+    const entries = Object.keys(node)
+    const matches = entries.filter(e => e.startsWith(lastPart))
+    
+    if (matches.length === 1) {
+      parts[parts.length - 1] = matches[0] + (isDir(node[matches[0]]) ? '/' : '')
+      return parts.join(' ')
+    }
+    // If multiple matches, we don't complete (could print them but keep it simple)
+    return null
+  }
+
   init()
 
-  return { lines, cwd, displayDir, promptHtml, exec, historyUp, historyDown, ready }
+  return { lines, cwd, displayDir, promptHtml, exec, historyUp, historyDown, tabComplete, ready }
 }
