@@ -534,6 +534,7 @@ export function useTerminal() {
       ["uname -a", "显示系统信息"],
       ["clear", "清空终端"],
       ["help", "显示此帮助"],
+      ["chat <文本>", "建立安全连接与管理员对话"],
       ["play <...>", "??? (HIDDEN_PROTOCOL)"],
     ];
     cmds.forEach(([cmd, desc]) => {
