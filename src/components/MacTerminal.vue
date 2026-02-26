@@ -296,20 +296,22 @@ onUnmounted(() => {
 :deep(.t-green) {
   color: #5af78e;
 }
-:global(.light-theme) :deep(.t-green) {
-  color: #333333;
+:global(.light-theme .t-green) {
+  color: #2e7d32;
+  font-weight: 700;
 }
 :deep(.t-blue) {
   color: #57c7ff;
 }
-:global(.light-theme) :deep(.t-blue) {
-  color: #57c7ff;
+:global(.light-theme .t-blue) {
+  color: #1976d2;
+  font-weight: 700;
   font-style: italic;
 }
 :deep(.t-red) {
   color: #ff6b6b;
 }
-:global(.light-theme) :deep(.t-red) {
+:global(.light-theme .t-red) {
   color: #ffffff;
   background: #ff9800;
   display: inline-block;
@@ -318,30 +320,32 @@ onUnmounted(() => {
 :deep(.t-yellow) {
   color: #f3f99d;
 }
-:global(.light-theme) :deep(.t-yellow) {
+:global(.light-theme .t-yellow) {
   color: #1a1a1a;
   background: #e5ff00;
   padding: 0 4px;
   display: inline-block;
   font-style: italic;
+  font-weight: bold;
 }
 :deep(.t-magenta) {
   color: #ff6ac1;
 }
-:global(.light-theme) :deep(.t-magenta) {
-  color: #1a1a1a;
-  background: rgba(255, 152, 0, 0.2);
+:global(.light-theme .t-magenta) {
+  color: #d81b60;
+  font-weight: 700;
 }
 :deep(.t-cyan) {
   color: #9aedfe;
 }
-:global(.light-theme) :deep(.t-cyan) {
-  color: #333333;
+:global(.light-theme .t-cyan) {
+  color: #00838f;
+  font-weight: 700;
 }
 :deep(.t-mute) {
   color: #666;
 }
-:global(.light-theme) :deep(.t-mute) {
+:global(.light-theme .t-mute) {
   color: #888888;
   font-style: italic;
 }
@@ -349,7 +353,7 @@ onUnmounted(() => {
   font-weight: bold;
   color: #fff;
 }
-:global(.light-theme) :deep(.t-bold) {
+:global(.light-theme .t-bold) {
   color: #1a1a1a;
   font-weight: 900;
 }
