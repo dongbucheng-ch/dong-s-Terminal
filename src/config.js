@@ -13,7 +13,7 @@ export const CFG = {
   // Google reCAPTCHA v2 站点密钥
   // 测试密钥（总是通过）: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
   // 生产环境请到 https://www.google.com/recaptcha/admin 获取真实密钥
-  recaptchaKey: "6Ld9lHgsAAAAAMnmSHx7W9vZTZFUspc3IGiQuyUS",
+  recaptchaKey: "6Lefo3gsAAAAAOnwBnb8QjyLE5NcWc18bA1oUPRj",
 };
 
 export const STEPS = [
