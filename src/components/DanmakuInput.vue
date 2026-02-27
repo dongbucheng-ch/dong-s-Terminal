@@ -12,23 +12,44 @@
         @keydown.esc="open = false"
       />
     </div>
-    <!-- 圆形按钮 -->
-    <button class="danmaku-fab" :class="{ active: open }" @click="toggleOpen">
-      <svg v-if="!open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-      </svg>
-      <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="5" y1="12" x2="19" y2="12" />
-        <polyline points="12 5 19 12 12 19" />
-      </svg>
-    </button>
+    <!-- 按钮组（垂直排列） -->
+    <div class="danmaku-fab-group">
+      <!-- 弹幕开关按钮 -->
+      <button class="danmaku-fab danmaku-fab-sm" :class="{ off: !danmakuVisible }" @click="$emit('toggle-visible')">
+        <!-- 眼睛打开 -->
+        <svg v-if="danmakuVisible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+        <!-- 眼睛关闭 -->
+        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+          <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+          <line x1="1" y1="1" x2="23" y2="23" />
+        </svg>
+      </button>
+      <!-- 发送弹幕按钮 -->
+      <button class="danmaku-fab" :class="{ active: open }" @click="toggleOpen">
+        <svg v-if="!open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, nextTick } from "vue";
 
-const emit = defineEmits(["send"]);
+const props = defineProps({
+  danmakuVisible: { type: Boolean, default: true },
+});
+
+const emit = defineEmits(["send", "toggle-visible"]);
 const text = ref("");
 const sending = ref(false);
 const open = ref(false);
@@ -59,8 +80,14 @@ async function handleSend() {
   right: 32px;
   z-index: 1002;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 0;
+}
+
+.danmaku-fab-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* 输入框区域 */
@@ -74,6 +101,7 @@ async function handleSend() {
     opacity 0.3s ease,
     transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: none;
+  align-self: flex-end;
 }
 
 .danmaku-input-area.open {
@@ -121,7 +149,8 @@ async function handleSend() {
   transition:
     transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
     background 0.2s,
-    border-color 0.2s;
+    border-color 0.2s,
+    opacity 0.2s;
 }
 .danmaku-fab:hover {
   background: rgba(229, 255, 0, 0.15);
@@ -138,6 +167,21 @@ async function handleSend() {
 .danmaku-fab svg {
   width: 22px;
   height: 22px;
+}
+
+/* 小按钮（弹幕开关） */
+.danmaku-fab-sm {
+  width: 38px;
+  height: 38px;
+  align-self: center;
+}
+.danmaku-fab-sm svg {
+  width: 18px;
+  height: 18px;
+}
+.danmaku-fab-sm.off {
+  opacity: 0.5;
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Light Theme */
@@ -170,6 +214,11 @@ async function handleSend() {
 :global(.light-theme .danmaku-fab.active:hover) {
   background: #ffb74d;
 }
+:global(.light-theme .danmaku-fab-sm.off) {
+  opacity: 0.4;
+  background: #ddd;
+  border-color: #999;
+}
 
 /* 移动端适配 */
 @media (max-width: 640px) {
@@ -183,6 +232,10 @@ async function handleSend() {
   .danmaku-fab {
     width: 44px;
     height: 44px;
+  }
+  .danmaku-fab-sm {
+    width: 34px;
+    height: 34px;
   }
 }
 </style>

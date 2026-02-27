@@ -1,5 +1,5 @@
 <template>
-  <div class="danmaku-layer" ref="layerRef">
+  <div class="danmaku-layer" ref="layerRef" v-show="visible">
     <div
       v-for="item in activeItems"
       :key="item.uid"
@@ -21,6 +21,7 @@ import { ref, watch, onUnmounted } from "vue";
 
 const props = defineProps({
   danmakuList: { type: Array, default: () => [] },
+  visible: { type: Boolean, default: true },
 });
 
 const layerRef = ref(null);
@@ -101,9 +102,10 @@ onUnmounted(() => {
   position: absolute;
   right: 0;
   white-space: nowrap;
-  font-size: 16px;
-  font-weight: 600;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  font-weight: 400;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.9);
   animation: danmaku-scroll linear forwards;
   transform: translateX(100%);
 }
