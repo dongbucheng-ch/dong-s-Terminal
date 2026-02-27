@@ -164,7 +164,11 @@ async function handleSend() {
 }
 :global(.light-theme) .danmaku-fab.active {
   background: #ff9800;
+  border-color: #333;
   color: #1a1a1a;
+}
+:global(.light-theme) .danmaku-fab.active:hover {
+  background: #ffb74d;
 }
 
 /* 移动端适配 */
