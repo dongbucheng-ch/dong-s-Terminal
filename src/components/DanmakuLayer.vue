@@ -94,7 +94,7 @@ onUnmounted(() => {
   height: 50vh;
   overflow: hidden;
   pointer-events: none;
-  z-index: 1000;
+  z-index: 999;
 }
 
 .danmaku-item {

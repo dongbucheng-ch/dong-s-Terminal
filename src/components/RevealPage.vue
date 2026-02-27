@@ -70,7 +70,7 @@ onUnmounted(() => {
 <style scoped>
 .card {
   position: relative;
-  z-index: 1;
+  z-index: 1001;
   width: 92%;
   max-width: 800px;
   padding: 36px 48px 40px;

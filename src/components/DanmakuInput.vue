@@ -57,7 +57,7 @@ async function handleSend() {
   position: fixed;
   bottom: 32px;
   right: 32px;
-  z-index: 1001;
+  z-index: 1002;
   display: flex;
   align-items: center;
   gap: 0;
@@ -143,8 +143,9 @@ async function handleSend() {
 /* Light Theme */
 :global(.light-theme) .danmaku-input {
   border: 2px solid #333;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   color: #1a1a1a;
+  border-radius: 0;
 }
 :global(.light-theme) .danmaku-input:focus {
   border-color: #ff9800;
@@ -154,15 +155,16 @@ async function handleSend() {
 }
 :global(.light-theme) .danmaku-fab {
   border: 2px solid #333;
-  background: rgba(255, 255, 255, 0.9);
+  background: #ff9800;
   color: #1a1a1a;
 }
 :global(.light-theme) .danmaku-fab:hover {
-  background: #ff9800;
+  background: #ffb74d;
   border-color: #333;
 }
 :global(.light-theme) .danmaku-fab.active {
-  background: #ffe0b2;
+  background: #ff9800;
+  color: #1a1a1a;
 }
 
 /* 移动端适配 */
