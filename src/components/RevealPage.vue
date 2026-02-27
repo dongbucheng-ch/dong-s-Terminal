@@ -1,6 +1,10 @@
 <template>
   <DanmakuLayer :danmaku-list="danmakuList" :visible="danmakuVisible" />
-  <DanmakuInput @send="onSendDanmaku" @toggle-visible="danmakuVisible = !danmakuVisible" :danmaku-visible="danmakuVisible" />
+  <DanmakuInput
+    @send="onSendDanmaku"
+    @toggle-visible="danmakuVisible = !danmakuVisible"
+    :danmaku-visible="danmakuVisible"
+  />
   <div class="card reveal-card" ref="cardRef">
     <div class="hdr">
       <div class="spacer"></div>
@@ -25,8 +29,13 @@
       </div>
     </div>
     <h1 class="title">YOU GOT PRANKED</h1>
-    <p class="visit-count" v-if="visitCount !== null">第 {{ visitCount }} 位被整的人</p>
-    <MacTerminal style="flex: 1; min-height: 400px;" :skipped-verify="skippedVerify" />
+    <p class="visit-count" v-if="visitCount !== null">
+      第 {{ visitCount }} 位被整的人
+    </p>
+    <MacTerminal
+      style="flex: 1; min-height: 400px"
+      :skipped-verify="skippedVerify"
+    />
   </div>
 </template>
 
@@ -46,7 +55,6 @@ const props = defineProps({
 
 const { isDark, toggleTheme } = useTheme();
 const cardRef = ref(null);
-const danmakuVisible = ref(true);
 useTilt(cardRef);
 
 const { danmakuList, loadHistory, subscribe, send, unsubscribe } = useDanmaku();
@@ -223,9 +231,9 @@ onUnmounted(() => {
   font-family: monospace;
   font-weight: 900;
 }
-:global(.light-theme .reveal-text p) { 
-  color: #666666; 
-  font-family: monospace; 
+:global(.light-theme .reveal-text p) {
+  color: #666666;
+  font-family: monospace;
   font-style: italic;
 }
 :global(.light-theme .card::before) {
