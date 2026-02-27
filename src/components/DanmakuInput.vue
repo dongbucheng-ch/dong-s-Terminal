@@ -62,14 +62,15 @@ function toggleOpen() {
   }
 }
 
-async function handleSend() {
+function handleSend() {
   if (!text.value.trim() || sending.value) return;
   sending.value = true;
-  emit("send", text.value);
+  emit("send", text.value.trim());
   text.value = "";
   setTimeout(() => {
     sending.value = false;
-  }, 1000);
+    inputRef.value?.focus();
+  }, 500);
 }
 </script>
 

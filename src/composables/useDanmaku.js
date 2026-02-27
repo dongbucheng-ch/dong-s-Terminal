@@ -52,6 +52,7 @@ export function useDanmaku() {
     const { error } = await supabase
       .from("danmaku")
       .insert({ content: text, color });
+    if (error) console.error("[danmaku] insert failed:", error);
     return !error;
   }
 
