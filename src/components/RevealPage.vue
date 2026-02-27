@@ -55,6 +55,7 @@ const props = defineProps({
 
 const { isDark, toggleTheme } = useTheme();
 const cardRef = ref(null);
+const danmakuVisible = ref(true);
 useTilt(cardRef);
 
 const { danmakuList, loadHistory, subscribe, send, unsubscribe } = useDanmaku();
