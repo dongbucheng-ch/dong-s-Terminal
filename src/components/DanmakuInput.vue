@@ -141,33 +141,33 @@ async function handleSend() {
 }
 
 /* Light Theme */
-:global(.light-theme) .danmaku-input {
+:global(.light-theme .danmaku-input) {
   border: 2px solid #333;
   background: rgba(255, 255, 255, 0.95);
   color: #1a1a1a;
   border-radius: 0;
 }
-:global(.light-theme) .danmaku-input:focus {
+:global(.light-theme .danmaku-input:focus) {
   border-color: #ff9800;
 }
-:global(.light-theme) .danmaku-input::placeholder {
+:global(.light-theme .danmaku-input::placeholder) {
   color: #999;
 }
-:global(.light-theme) .danmaku-fab {
+:global(.light-theme .danmaku-fab) {
   border: 2px solid #333;
   background: #ff9800;
   color: #1a1a1a;
 }
-:global(.light-theme) .danmaku-fab:hover {
+:global(.light-theme .danmaku-fab:hover) {
   background: #ffb74d;
   border-color: #333;
 }
-:global(.light-theme) .danmaku-fab.active {
+:global(.light-theme .danmaku-fab.active) {
   background: #ff9800;
   border-color: #333;
   color: #1a1a1a;
 }
-:global(.light-theme) .danmaku-fab.active:hover {
+:global(.light-theme .danmaku-fab.active:hover) {
   background: #ffb74d;
 }
 
