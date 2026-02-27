@@ -2,8 +2,14 @@ import { ref } from "vue";
 import { supabase } from "../lib/supabase.js";
 
 const COLORS = [
-  "#e5ff00", "#00ff55", "#ff4400", "#00d4ff",
-  "#ff6eb4", "#ffa500", "#7b68ee", "#ffffff",
+  "rgba(229, 255, 0, 0.4)",
+  "rgba(0, 255, 85, 0.4)",
+  "rgba(255, 68, 0, 0.4)",
+  "rgba(0, 212, 255, 0.4)",
+  "rgba(255, 110, 180, 0.4)",
+  "rgba(255, 165, 0, 0.4)",
+  "rgba(123, 104, 238, 0.4)",
+  "rgba(255, 255, 255, 0.35)",
 ];
 
 export function useDanmaku() {

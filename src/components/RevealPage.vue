@@ -113,7 +113,7 @@ onUnmounted(() => {
   pointer-events: none;
 }
 .danmaku-text {
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'Maple Mono', monospace;
   font-size: 16px;
   white-space: nowrap;
 }
