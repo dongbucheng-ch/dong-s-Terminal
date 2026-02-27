@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from "vue";
+import { ref, watch, onUnmounted } from "vue";
 
 const props = defineProps({
   danmakuList: { type: Array, default: () => [] },
@@ -65,21 +65,20 @@ let lastLength = 0;
 watch(
   () => props.danmakuList.length,
   (newLen) => {
-    if (newLen > lastLength && lastLength > 0) {
-      for (let i = lastLength; i < newLen; i++) {
-        addToScreen(props.danmakuList[i]);
+    if (newLen > lastLength) {
+      if (lastLength === 0) {
+        // 首次加载历史弹幕，逐条播放
+        playHistory(props.danmakuList.slice(0, newLen));
+      } else {
+        // Realtime 新弹幕，直接上屏
+        for (let i = lastLength; i < newLen; i++) {
+          addToScreen(props.danmakuList[i]);
+        }
       }
     }
     lastLength = newLen;
   }
 );
-
-onMounted(() => {
-  if (props.danmakuList.length > 0) {
-    lastLength = props.danmakuList.length;
-    playHistory(props.danmakuList);
-  }
-});
 
 onUnmounted(() => {
   if (historyTimer) clearInterval(historyTimer);
