@@ -29,7 +29,7 @@ let uidCounter = 0;
 let historyTimer = null;
 
 function getLayerHeight() {
-  return layerRef.value?.clientHeight || 300;
+  return layerRef.value?.clientHeight || window.innerHeight * 0.5;
 }
 
 function addToScreen(item) {
@@ -67,11 +67,9 @@ watch(
   (newLen) => {
     if (newLen > lastLength) {
       if (lastLength === 0) {
-        // 首次加载历史弹幕
         pool = [...props.danmakuList.slice(0, newLen)];
         startLoop();
       } else {
-        // Realtime 新弹幕，加入弹幕池 + 立即上屏
         for (let i = lastLength; i < newLen; i++) {
           pool.push(props.danmakuList[i]);
           addToScreen(props.danmakuList[i]);
@@ -89,11 +87,14 @@ onUnmounted(() => {
 
 <style scoped>
 .danmaku-layer {
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50vh;
   overflow: hidden;
   pointer-events: none;
-  z-index: 10;
+  z-index: 1000;
 }
 
 .danmaku-item {

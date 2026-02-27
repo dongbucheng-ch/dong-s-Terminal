@@ -1,6 +1,7 @@
 <template>
+  <DanmakuLayer :danmaku-list="danmakuList" />
+  <DanmakuInput @send="onSendDanmaku" />
   <div class="card reveal-card" ref="cardRef">
-    <DanmakuLayer :danmaku-list="danmakuList" />
     <div class="hdr">
       <div class="spacer"></div>
       <div class="badge danger">Access Denied</div>
@@ -26,7 +27,6 @@
     <h1 class="title">YOU GOT PRANKED</h1>
     <p class="visit-count" v-if="visitCount !== null">第 {{ visitCount }} 位被整的人</p>
     <MacTerminal style="flex: 1; min-height: 400px;" :skipped-verify="skippedVerify" />
-    <DanmakuInput @send="onSendDanmaku" />
   </div>
 </template>
 
