@@ -48,17 +48,17 @@ function removeItem(uid) {
   activeItems.value = activeItems.value.filter((i) => i.uid !== uid);
 }
 
-function playHistory(list) {
+// 历史弹幕池，包含历史 + 后续新增的弹幕，循环播放
+let pool = [];
+
+function startLoop() {
+  if (historyTimer) return;
   let index = 0;
   historyTimer = setInterval(() => {
-    if (index >= list.length) {
-      clearInterval(historyTimer);
-      historyTimer = null;
-      return;
-    }
-    addToScreen(list[index]);
+    if (pool.length === 0) return;
+    addToScreen(pool[index % pool.length]);
     index++;
-  }, 300);
+  }, 500);
 }
 
 let lastLength = 0;
@@ -67,11 +67,13 @@ watch(
   (newLen) => {
     if (newLen > lastLength) {
       if (lastLength === 0) {
-        // 首次加载历史弹幕，逐条播放
-        playHistory(props.danmakuList.slice(0, newLen));
+        // 首次加载历史弹幕
+        pool = [...props.danmakuList.slice(0, newLen)];
+        startLoop();
       } else {
-        // Realtime 新弹幕，直接上屏
+        // Realtime 新弹幕，加入弹幕池 + 立即上屏
         for (let i = lastLength; i < newLen; i++) {
+          pool.push(props.danmakuList[i]);
           addToScreen(props.danmakuList[i]);
         }
       }
