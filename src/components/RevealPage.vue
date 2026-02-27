@@ -29,14 +29,14 @@
       </div>
     </div>
     <h1 class="title">YOU GOT PRANKED</h1>
-    <p class="visit-count" v-if="visitCount !== null">
-      第 {{ visitCount }} 位被整的人
-    </p>
     <MacTerminal
       style="flex: 1; min-height: 400px"
       :skipped-verify="skippedVerify"
     />
   </div>
+  <p class="visit-count" v-if="visitCount !== null">
+    第 {{ visitCount }} 位<s>被整</s>陷入欢愉的人
+  </p>
 </template>
 
 <script setup>
@@ -167,19 +167,28 @@ onUnmounted(() => {
   font-size: 38px;
   font-weight: 900;
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
   letter-spacing: -0.3px;
   transition: color 0.5s ease-in-out;
 }
 
 .visit-count {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
   text-align: center;
-  font-size: 13px;
-  color: rgba(229, 255, 0, 0.6);
-  margin-bottom: 16px;
-  font-weight: 500;
+  font-size: 12px;
+  color: rgba(200, 210, 230, 0.35);
+  font-weight: 400;
   letter-spacing: 0.5px;
   transition: color 0.5s ease-in-out;
+  white-space: nowrap;
+}
+.visit-count s {
+  text-decoration: line-through;
+  opacity: 0.7;
 }
 
 .reveal-text {
@@ -227,9 +236,8 @@ onUnmounted(() => {
   letter-spacing: -0.05em;
 }
 :global(.light-theme .visit-count) {
-  color: #ff9800;
+  color: rgba(0, 0, 0, 0.3);
   font-family: monospace;
-  font-weight: 900;
 }
 :global(.light-theme .reveal-text p) {
   color: #666666;
