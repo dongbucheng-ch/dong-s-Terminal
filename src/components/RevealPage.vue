@@ -34,9 +34,10 @@
       :skipped-verify="skippedVerify"
     />
   </div>
-  <p class="visit-count" v-if="visitCount !== null">
-    第 {{ visitCount }} 位<s>被整</s>陷入欢愉的人
-  </p>
+  <div class="visit-count" v-if="visitCount !== null">
+    <p>第 {{ visitCount }} 位<s>被整</s>陷入欢愉的人</p>
+    <p class="visit-sub">什么是欢愉?! 这！就是欢愉</p>
+  </div>
 </template>
 
 <script setup>
@@ -186,6 +187,11 @@ onUnmounted(() => {
   transition: color 0.5s ease-in-out;
   white-space: nowrap;
 }
+.visit-sub {
+  font-size: 10px;
+  color: rgba(255, 60, 60, 0.6);
+  margin-top: 2px;
+}
 .visit-count s {
   text-decoration: line-through;
   opacity: 0.7;
@@ -238,6 +244,9 @@ onUnmounted(() => {
 :global(.light-theme .visit-count) {
   color: rgba(0, 0, 0, 0.3);
   font-family: monospace;
+}
+:global(.light-theme .visit-sub) {
+  color: rgba(220, 30, 30, 0.5);
 }
 :global(.light-theme .reveal-text p) {
   color: #666666;
