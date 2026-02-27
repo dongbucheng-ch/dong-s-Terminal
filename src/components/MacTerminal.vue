@@ -84,11 +84,14 @@ function scrollToBottom() {
 
 let idleTimer = null;
 let hasUserInput = false;
+let idleTriggered = false;
 
 function resetIdleTimer() {
+  if (idleTriggered) return;
   if (idleTimer) clearTimeout(idleTimer);
   if (!hasUserInput) return;
   idleTimer = setTimeout(() => {
+    idleTriggered = true;
     if (!terminal.isGaming.value) {
       terminal.exec("chat hello?");
       terminal.injectAdminMessage();
