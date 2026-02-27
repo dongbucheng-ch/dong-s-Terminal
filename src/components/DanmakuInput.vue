@@ -169,15 +169,9 @@ async function handleSend() {
   height: 22px;
 }
 
-/* 小按钮（弹幕开关） */
+/* 弹幕开关按钮（同尺寸） */
 .danmaku-fab-sm {
-  width: 38px;
-  height: 38px;
   align-self: center;
-}
-.danmaku-fab-sm svg {
-  width: 18px;
-  height: 18px;
 }
 .danmaku-fab-sm.off {
   opacity: 0.5;
@@ -232,10 +226,6 @@ async function handleSend() {
   .danmaku-fab {
     width: 44px;
     height: 44px;
-  }
-  .danmaku-fab-sm {
-    width: 34px;
-    height: 34px;
   }
 }
 </style>

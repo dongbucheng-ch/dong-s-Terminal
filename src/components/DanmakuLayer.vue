@@ -78,7 +78,7 @@ watch(
       }
     }
     lastLength = newLen;
-  }
+  },
 );
 
 onUnmounted(() => {
@@ -102,10 +102,10 @@ onUnmounted(() => {
   position: absolute;
   right: 0;
   white-space: nowrap;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 12px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 16px;
   font-weight: 400;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.9);
+  /* text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.9); */
   animation: danmaku-scroll linear forwards;
   transform: translateX(100%);
 }
