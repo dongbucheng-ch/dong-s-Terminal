@@ -2,7 +2,6 @@
   <vue-danmaku
     ref="danmakuRef"
     v-model:danmus="danmakuList"
-    v-show="danmakuVisible"
     class="danmaku-container"
     loop
     :speeds="120"
@@ -17,7 +16,7 @@
   </vue-danmaku>
   <DanmakuInput
     @send="onSendDanmaku"
-    @toggle-visible="danmakuVisible = !danmakuVisible"
+    @toggle-visible="toggleDanmaku"
     :danmaku-visible="danmakuVisible"
   />
   <div class="card reveal-card" ref="cardRef">
@@ -79,6 +78,15 @@ const { visitCount, incrementAndGet } = useVisitCounter();
 
 function onSendDanmaku(content) {
   send(content);
+}
+
+function toggleDanmaku() {
+  danmakuVisible.value = !danmakuVisible.value;
+  if (danmakuVisible.value) {
+    danmakuRef.value?.show();
+  } else {
+    danmakuRef.value?.hide();
+  }
 }
 
 onMounted(() => {
