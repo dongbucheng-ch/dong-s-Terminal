@@ -1,5 +1,20 @@
 <template>
-  <DanmakuLayer :danmaku-list="danmakuList" :visible="danmakuVisible" />
+  <vue-danmaku
+    ref="danmakuRef"
+    v-model:danmus="danmakuList"
+    v-show="danmakuVisible"
+    class="danmaku-container"
+    loop
+    :speeds="120"
+    :channels="0"
+    randomChannel
+    :debounce="200"
+    :z-index="999"
+  >
+    <template #danmu="{ danmu }">
+      <span class="danmaku-text" :style="{ color: danmu.color }">{{ danmu.content }}</span>
+    </template>
+  </vue-danmaku>
   <DanmakuInput
     @send="onSendDanmaku"
     @toggle-visible="danmakuVisible = !danmakuVisible"
@@ -41,8 +56,8 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
+import vueDanmaku from "vue-danmaku";
 import MacTerminal from "./MacTerminal.vue";
-import DanmakuLayer from "./DanmakuLayer.vue";
 import DanmakuInput from "./DanmakuInput.vue";
 import { useTilt } from "../composables/useTilt.js";
 import { useTheme } from "../composables/useTheme.js";
@@ -56,6 +71,7 @@ const props = defineProps({
 const { isDark, toggleTheme } = useTheme();
 const cardRef = ref(null);
 const danmakuVisible = ref(true);
+const danmakuRef = ref(null);
 useTilt(cardRef);
 
 const { danmakuList, loadHistory, subscribe, send, unsubscribe } = useDanmaku();
@@ -68,7 +84,9 @@ function onSendDanmaku(content) {
 onMounted(() => {
   incrementAndGet();
   loadHistory().then(() => {
-    subscribe();
+    subscribe((newDanmu) => {
+      danmakuRef.value?.insert(newDanmu);
+    });
   });
 });
 
@@ -78,6 +96,20 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.danmaku-container {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50vh;
+  pointer-events: none;
+}
+.danmaku-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
 .card {
   position: relative;
   z-index: 1001;

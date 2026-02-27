@@ -19,7 +19,10 @@
         v-html="line"
       ></div>
       <!-- Input line -->
-      <div class="line input-line" v-if="terminal.ready.value && !terminal.isGaming.value">
+      <div
+        class="line input-line"
+        v-if="terminal.ready.value && !terminal.isGaming.value"
+      >
         <span v-html="terminal.promptHtml.value"></span>
         <span>{{ currentInput }}</span>
         <span class="cursor" :class="{ blink: focused }">█</span>
@@ -59,9 +62,12 @@ const snakeGameActive = ref(false);
 const terminalRef = ref(null);
 useTilt(terminalRef);
 
-watch(() => terminal.triggerGlitch.value, (val) => {
-  if (val) triggerGlitch();
-})
+watch(
+  () => terminal.triggerGlitch.value,
+  (val) => {
+    if (val) triggerGlitch();
+  },
+);
 
 function focusInput() {
   inputRef.value?.focus();
@@ -89,7 +95,7 @@ function resetIdleTimer() {
 
 function onKeyDown(e) {
   resetIdleTimer();
-  
+
   if (terminal.isGaming.value) {
     e.preventDefault();
     terminal.handleGameInput(e.key);

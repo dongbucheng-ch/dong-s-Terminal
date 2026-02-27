@@ -25,7 +25,7 @@ export function useDanmaku() {
     }
   }
 
-  function subscribe() {
+  function subscribe(onNewDanmaku) {
     channel = supabase
       .channel("danmaku-realtime")
       .on(
@@ -33,6 +33,7 @@ export function useDanmaku() {
         { event: "INSERT", schema: "public", table: "danmaku" },
         (payload) => {
           danmakuList.value.push(payload.new);
+          if (onNewDanmaku) onNewDanmaku(payload.new);
         }
       )
       .subscribe();
