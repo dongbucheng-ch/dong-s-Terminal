@@ -125,15 +125,18 @@ export function useTerminal({ skippedVerify = false } = {}) {
   }
 
   function spawnFood() {
-    while (true) {
+    const maxAttempts = 400;
+    for (let i = 0; i < maxAttempts; i++) {
       food = [Math.floor(Math.random() * 20), Math.floor(Math.random() * 20)];
       if (
         !snake.some(
           (segment) => segment[0] === food[0] && segment[1] === food[1],
         )
       )
-        break;
+        return;
     }
+    // Board is full, end game
+    stopGame();
   }
 
   function gameLoop() {
@@ -787,6 +790,10 @@ export function useTerminal({ skippedVerify = false } = {}) {
     return null;
   }
 
+  function destroy() {
+    if (gameInterval) clearInterval(gameInterval);
+  }
+
   init();
 
   return {
@@ -803,5 +810,6 @@ export function useTerminal({ skippedVerify = false } = {}) {
     isGaming,
     handleGameInput,
     injectAdminMessage,
+    destroy,
   };
 }

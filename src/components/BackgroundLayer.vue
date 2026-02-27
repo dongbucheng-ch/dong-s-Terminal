@@ -27,33 +27,31 @@ import { useTheme } from '../composables/useTheme.js'
 const { isDark } = useTheme()
 const canvasRef = ref(null)
 let animationId = null
+let resizeHandler = null
 
 onMounted(() => {
   const canvas = canvasRef.value
   if (!canvas) return
   const ctx = canvas.getContext('2d')
-  
+
   let width, height
   let particles = []
-  
+
   let colors = ['#e5ff00', '#00ff55', '#ff4400']
   let isLight = false
-  
+
   watch(isDark, (val) => {
     isLight = !val
     colors = val ? ['#e5ff00', '#00ff55', '#ff4400'] : ['#888888', '#aaaaaa', '#cccccc']
     particles.forEach(p => {
       p.color = colors[Math.floor(Math.random() * colors.length)]
     })
+    if (isLight) {
+      if (animationId) { cancelAnimationFrame(animationId); animationId = null }
+    } else {
+      if (!animationId) draw()
+    }
   })
-
-  function resize() {
-    width = window.innerWidth
-    height = window.innerHeight
-    canvas.width = width
-    canvas.height = height
-    initParticles()
-  }
 
   function initParticles() {
     particles = []
@@ -93,24 +91,32 @@ onMounted(() => {
       }
       
       let currentAlpha = p.alpha * (p.life / 150) // Fade out
-      if (isLight) currentAlpha = 0 // Hide particles in light mode
       ctx.globalAlpha = currentAlpha
       ctx.fillStyle = p.color
       ctx.beginPath()
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
       ctx.fill()
     }
-    
+
     animationId = requestAnimationFrame(draw)
   }
 
+  function resize() {
+    width = window.innerWidth
+    height = window.innerHeight
+    canvas.width = width
+    canvas.height = height
+    initParticles()
+  }
+
+  resizeHandler = resize
   window.addEventListener('resize', resize)
   resize()
   draw()
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', resize)
+  if (resizeHandler) window.removeEventListener('resize', resizeHandler)
   if (animationId) cancelAnimationFrame(animationId)
 })
 </script>

@@ -11,7 +11,9 @@
     :z-index="999"
   >
     <template #danmu="{ danmu }">
-      <span class="danmaku-text" :style="{ color: danmu.color }">{{ danmu.content }}</span>
+      <span class="danmaku-text" :style="{ color: danmu.color }">{{
+        danmu.content
+      }}</span>
     </template>
   </vue-danmaku>
   <DanmakuInput
@@ -21,8 +23,9 @@
   />
   <div class="card reveal-card" ref="cardRef">
     <div class="hdr">
-      <div class="spacer"></div>
+      <!-- <div class="spacer"></div> -->
       <div class="badge danger">Access Denied</div>
+      <h1 class="title">YOU GOT PRANKED</h1>
       <div class="spacer end">
         <div class="moon-btn" @click="toggleTheme">
           <svg v-if="isDark" viewBox="0 0 24 24">
@@ -42,9 +45,9 @@
         </div>
       </div>
     </div>
-    <h1 class="title">YOU GOT PRANKED</h1>
+
     <MacTerminal
-      style="flex: 1; min-height: 400px"
+      style="flex: 1; min-height: 500px"
       :skipped-verify="skippedVerify"
     />
   </div>
@@ -113,7 +116,7 @@ onUnmounted(() => {
   pointer-events: none;
 }
 .danmaku-text {
-  font-family: 'Maple Mono', monospace;
+  font-family: "Maple Mono", monospace;
   font-size: 16px;
   white-space: nowrap;
 }
@@ -123,7 +126,7 @@ onUnmounted(() => {
   z-index: 1001;
   width: 92%;
   max-width: 800px;
-  padding: 36px 48px 40px;
+  padding: 20px 30px 30px;
   border-radius: 8px; /* Sharper edges */
   background: rgba(10, 12, 16, 0.9); /* Darker, more opaque */
   border: 3px solid rgba(255, 68, 0, 0.2); /* Hot Orange accent border */
@@ -150,12 +153,14 @@ onUnmounted(() => {
 
 .hdr {
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 8px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  height: 45px;
 }
-.spacer {
+/* .spacer {
   flex: 1;
-}
+} */
 .spacer.end {
   display: flex;
   justify-content: flex-end;
@@ -205,11 +210,13 @@ onUnmounted(() => {
 }
 
 .title {
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 900;
+  font-style: italic;
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 6px;
   letter-spacing: -0.3px;
+  line-height: 45px;
   transition: color 0.5s ease-in-out;
 }
 
@@ -230,18 +237,6 @@ onUnmounted(() => {
 .visit-count s {
   text-decoration: line-through;
   opacity: 0.7;
-}
-
-.reveal-text {
-  text-align: center;
-  margin-bottom: 24px;
-}
-.reveal-text p {
-  font-size: 14.5px;
-  color: rgba(200, 210, 230, 0.5);
-  line-height: 2;
-  margin: 0;
-  transition: color 0.5s ease-in-out;
 }
 
 /* --- Light Theme --- */
@@ -279,11 +274,6 @@ onUnmounted(() => {
 :global(.light-theme .visit-count) {
   color: rgba(0, 0, 0, 0.3);
   font-family: monospace;
-}
-:global(.light-theme .reveal-text p) {
-  color: #666666;
-  font-family: monospace;
-  font-style: italic;
 }
 :global(.light-theme .card::before) {
   background: #ff9800;

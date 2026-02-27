@@ -1,26 +1,9 @@
-// ═══════════════════════════════════════════
-//  配置区域 — 替换为你自己的密钥
-// ═══════════════════════════════════════════
-
 export const CFG = {
   siteName: "Dong's-Terminal",
-
-  // Cloudflare Turnstile 站点密钥
-  // 测试密钥（总是通过）: 1x00000000000000000000AA
-  // 生产环境请到 https://dash.cloudflare.com/ 获取真实密钥
-  turnstileKey: "0x4AAAAAACipA082J-j9iniR",
-  // turnstileKey: "1x00000000000000000000AA",
-
-  // Google reCAPTCHA v2 站点密钥
-  // 测试密钥（总是通过）: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
-  // 生产环境请到 https://www.google.com/recaptcha/admin 获取真实密钥
-  recaptchaKey: "6Lefo3gsAAAAAOnwBnb8QjyLE5NcWc18bA1oUPRj",
-  // recaptchaKey: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
-
-  // Supabase
-  supabaseUrl: "https://chchrhcihgylwmrkacog.supabase.co",
-  supabaseAnonKey:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNoY2hyaGNpaGd5bHdtcmthY29nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxNzkxNjIsImV4cCI6MjA4Nzc1NTE2Mn0.diuMotv4mc4WgZFYRvSbjqyj1028tMpbnGXXRy864bo",
+  turnstileKey: import.meta.env.VITE_TURNSTILE_KEY,
+  recaptchaKey: import.meta.env.VITE_RECAPTCHA_KEY,
+  supabaseUrl: import.meta.env.VITE_SUPABASE_URL,
+  supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
 };
 
 export const STEPS = [

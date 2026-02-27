@@ -12,6 +12,13 @@ const COLORS = [
   "rgba(255, 255, 255, 0.35)",
 ];
 
+const COLOR_REGEX = /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\)$/;
+const FALLBACK_COLOR = "rgba(255, 255, 255, 0.35)";
+
+function safeColor(color) {
+  return COLOR_REGEX.test(color) ? color : FALLBACK_COLOR;
+}
+
 export function useDanmaku() {
   const danmakuList = ref([]);
   let channel = null;
@@ -27,7 +34,10 @@ export function useDanmaku() {
       .order("created_at", { ascending: false })
       .limit(100);
     if (data) {
-      danmakuList.value = data.reverse();
+      danmakuList.value = data.reverse().map((d) => ({
+        ...d,
+        color: safeColor(d.color),
+      }));
     }
   }
 
@@ -38,8 +48,9 @@ export function useDanmaku() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "danmaku" },
         (payload) => {
-          danmakuList.value.push(payload.new);
-          if (onNewDanmaku) onNewDanmaku(payload.new);
+          const safe = { ...payload.new, color: safeColor(payload.new.color) };
+          danmakuList.value.push(safe);
+          if (onNewDanmaku) onNewDanmaku(safe);
         }
       )
       .subscribe();
@@ -49,11 +60,12 @@ export function useDanmaku() {
     const text = content.trim().slice(0, 50);
     if (!text) return false;
     const color = randomColor();
-    const { error } = await supabase
-      .from("danmaku")
-      .insert({ content: text, color });
-    if (error) console.error("[danmaku] insert failed:", error);
-    return !error;
+    const { data, error } = await supabase.rpc("send_danmaku", {
+      p_content: text,
+      p_color: color,
+    });
+    if (error) console.error("[danmaku] send failed:", error);
+    return !error && data === true;
   }
 
   function unsubscribe() {

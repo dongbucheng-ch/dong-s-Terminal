@@ -22,6 +22,36 @@ create policy "Anyone can insert danmaku"
   with check (char_length(content) <= 50);
 
 -- ==========================================
+-- RPC: 速率限制的弹幕发送 (每分钟最多30条全局)
+-- ==========================================
+create or replace function send_danmaku(p_content text, p_color text)
+returns boolean
+language plpgsql
+security definer
+as $$
+declare
+  recent_count int;
+begin
+  -- 校验内容
+  if char_length(p_content) > 50 or char_length(p_content) = 0 then
+    return false;
+  end if;
+
+  -- 全局速率限制: 每分钟最多 30 条
+  select count(*) into recent_count
+  from danmaku
+  where created_at > now() - interval '1 minute';
+
+  if recent_count >= 30 then
+    return false;
+  end if;
+
+  insert into danmaku (content, color) values (p_content, p_color);
+  return true;
+end;
+$$;
+
+-- ==========================================
 -- 访问计数表
 -- ==========================================
 create table visit_counter (

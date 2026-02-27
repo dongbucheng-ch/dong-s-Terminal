@@ -34,6 +34,8 @@
       class="hidden-input"
       v-model="currentInput"
       @keydown="onKeyDown"
+      @focus="onFocus"
+      @blur="onBlur"
       autocapitalize="off"
       autocorrect="off"
       spellcheck="false"
@@ -57,8 +59,6 @@ const currentInput = ref("");
 const focused = ref(true);
 const bodyRef = ref(null);
 const inputRef = ref(null);
-const snakeGameActive = ref(false);
-
 const terminalRef = ref(null);
 useTilt(terminalRef);
 
@@ -70,6 +70,8 @@ watch(
 );
 
 function focusInput() {
+  const sel = window.getSelection();
+  if (sel && sel.toString().length > 0) return;
   inputRef.value?.focus();
 }
 
@@ -81,19 +83,22 @@ function scrollToBottom() {
 }
 
 let idleTimer = null;
+let hasUserInput = false;
 
 function resetIdleTimer() {
   if (idleTimer) clearTimeout(idleTimer);
+  if (!hasUserInput) return;
   idleTimer = setTimeout(() => {
     if (!terminal.isGaming.value) {
-      terminal.exec("chat hello?"); // Self-trigger a fake chat or just inject a line
+      terminal.exec("chat hello?");
       terminal.injectAdminMessage();
       scrollToBottom();
     }
-  }, 30000); // 30 seconds of idle time
+  }, 30000);
 }
 
 function onKeyDown(e) {
+  hasUserInput = true;
   resetIdleTimer();
 
   if (terminal.isGaming.value) {
@@ -141,17 +146,13 @@ function onBlur() {
 watch(() => terminal.lines.value.length, scrollToBottom);
 
 onMounted(() => {
-  inputRef.value?.addEventListener("focus", onFocus);
-  inputRef.value?.addEventListener("blur", onBlur);
   // Auto focus
   setTimeout(() => focusInput(), 100);
-  resetIdleTimer();
 });
 
 onUnmounted(() => {
-  inputRef.value?.removeEventListener("focus", onFocus);
-  inputRef.value?.removeEventListener("blur", onBlur);
   if (idleTimer) clearTimeout(idleTimer);
+  terminal.destroy();
 });
 </script>
 
@@ -224,7 +225,7 @@ onUnmounted(() => {
   line-height: 1.55;
   color: #ccc;
   min-height: 200px;
-  max-height: 360px;
+  max-height: 460px;
   transition: color 0.5s ease-in-out;
 }
 .body::-webkit-scrollbar {

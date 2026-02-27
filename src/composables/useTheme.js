@@ -1,4 +1,4 @@
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 // Global state
 const isDark = ref(true);
@@ -22,6 +22,12 @@ export function useTheme() {
     setTimeout(() => {
       window.location.href = "https://www.dongbucheng.fun";
     }, 4500);
+
+    // Fallback: if redirect was blocked, remove glitch after 6s
+    setTimeout(() => {
+      isGlitching.value = false;
+      document.documentElement.classList.remove("glitch-mode");
+    }, 6000);
   }
 
   return {
